@@ -98,6 +98,7 @@ public abstract class SparseArray<T> {
 			}
 			
 		}
+		System.out.println();
 		
 	}
 	
@@ -117,7 +118,7 @@ public abstract class SparseArray<T> {
 		System.out.println();
 		System.out.println("offset");
 		for (int i = 0; i < offset.length; i++) {
-			System.out.format("%5d ",offset[i]);
+			System.out.print(offset[i]+" ");
 		}
 		System.out.println();
 	}

@@ -2,33 +2,37 @@ package sparsearray;
 
 import java.util.ArrayList;
 import java.util.List;
-//import java.util.Random;
+import java.util.Random;
 
 public class IntegerSparseArray extends SparseArray<Integer> {
 	
 	public static void main(String[] args){
 
 
-		//Random rand = new Random();
-		//Integer[][] array = new Integer[3][3];
-		Integer[][] array = new Integer[][]{{0,2,1},{1,0,0},{0,1,2},{0,0,0}};
-		//Integer[][] array2 = new Integer[3][3];
-		Integer[][] array2 = new Integer[][]{{2,0,0},{1,0,1},{1,0,4}};
-/*		for (int i = 0; i < array.length; i++) {
+		Random rand = new Random();
+		//Integer[][] array = new Integer[50][100];
+		Integer[][] array =new Integer[][]{{0,2,0},{1,0,0},{0,1,0},{0,0,0}};
+		//Integer[][] array =new Integer[][]{{2},{1},{1}};
+		//Integer[][] array2 = new Integer[100][10];
+		Integer[][] array2 =new Integer[][]{{2,0,0},{0,0,1},{1,0,4}};
+		//Integer[][] array2 =new Integer[][]{{0,2,1}};
+		for (int i = 0; i < array.length; i++) {
 			for (int j = 0; j < array[0].length; j++) {
-				array[i][j] = rand.nextInt(3);
+				array[i][j] = rand.nextInt(2);
 			}
 		}
 		
 		for (int i = 0; i < array2.length; i++) {
 			for (int j = 0; j < array2[0].length; j++) {
-				array2[i][j] = rand.nextInt(3);
+				array2[i][j] = rand.nextInt(2);
 			}
-		}*/
+		}
 		SparseArray<Integer> sp = new IntegerSparseArray(array);
 		sp.printSparseData();
+		sp.printArray();
 		SparseArray<Integer> sp2 = new IntegerSparseArray(array2);
 		sp2.printSparseData();
+		sp2.printArray();
 		IntegerSparseArray a = (IntegerSparseArray) sp.arrayMultiplication(sp2);
 		a.printSparseData();
 		a.printArray();

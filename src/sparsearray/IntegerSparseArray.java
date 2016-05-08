@@ -33,12 +33,16 @@ public class IntegerSparseArray extends SparseArray<Integer> {
 		SparseArray<Integer> sp2 = new IntegerSparseArray(array2);
 		sp2.printSparseData();
 		sp2.printArray();
-		IntegerSparseArray a = (IntegerSparseArray) sp.arrayMultiplication(sp2);
-		a.printSparseData();
-		a.printArray();
-
+		IntegerSparseArray a;
+		try {
+			a = (IntegerSparseArray) sp.arrayMultiplication(sp2);
+			a.printSparseData();
+			a.printArray();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
-	
 	
 	public IntegerSparseArray(Integer[][] denseArray){
 		super(0,denseArray);
@@ -48,10 +52,13 @@ public class IntegerSparseArray extends SparseArray<Integer> {
 		super(data,position,offset,rows,columns,0);
 	}
 	
-	
-	
+
 	@Override
-	public SparseArray<Integer> arrayMultiplication(SparseArray<Integer> sArray){
+	public SparseArray<Integer> arrayMultiplication(SparseArray<Integer> sArray) throws Exception{
+		
+		if (getColumns()!= sArray.getRows()){
+			throw new Exception("Dimensions do not match");
+		}
 		
 		List<Integer> data = new ArrayList<Integer>();
 		List<Integer> position = new ArrayList<Integer>();
@@ -67,18 +74,13 @@ public class IntegerSparseArray extends SparseArray<Integer> {
 			init(rowlist,positionlist,sArray.getColumns());
 			for (int i = getOffset(n); i < getOffset(n+1); i++) {
 				
-				for (int j = sArray.getOffset(getPosition().get(i)); j < sArray.getOffset(getPosition().get(i)+1); j++) {
-					
-				
-/*						if(sArray.getOffset(getPosition().get(i)) == sArray.getOffset(getPosition().get(i) +1) ){
-					
-				}*/
+				for (int j = sArray.getOffset(getPosition().get(i)); j < sArray.getOffset(getPosition().get(i)+1); j++) {					
 				
 					rowlist.set(sArray.getPosition().get(j),add(rowlist.get(sArray.getPosition().get(j)),mult(getData().get(i), sArray.getData().get(j))));
 					positionlist.set(sArray.getPosition().get(j),sArray.getPosition().get(j));
 				}						
 			}
-			//counter=0;
+
 			for (Integer obj : rowlist) {
 				if (obj!=this.getZero()){
 					data.add(obj);
@@ -97,26 +99,7 @@ public class IntegerSparseArray extends SparseArray<Integer> {
 		}
 		
 		return new IntegerSparseArray(data,position,offset,getRows(),sArray.getColumns());
-		
-/*		System.out.println("data");
-		for (Iterator<T> iterator = data.iterator(); iterator.hasNext();) {
-			//System.out.format("%5d ",(T) iterator.next());	
-			System.out.println(iterator.next()+" ");	
-		}
-		System.out.println();
-		System.out.println("position");
-		for (Integer p : position) {
-			//System.out.format("%5d ",p);
-			System.out.println(p+" ");	
-		}		
-		System.out.println();
-		System.out.println("offset");
-		for (int i = 0; i < offset.length; i++) {
-			System.out.format("%5d ",offset[i]);
-		}
-		System.out.println();*/
-		
-		
+
 	}
 	
 	private void init(List<Integer> rowlist,List<Integer> positionlist,int length){
@@ -129,13 +112,10 @@ public class IntegerSparseArray extends SparseArray<Integer> {
 		}
 	}
 	
-	
-
-
 	@Override
 	public Integer mult(Integer obj1, Integer obj2) {
 		// TODO Auto-generated method stub
-		return (obj1* obj2);
+		return (obj1 * obj2);
 	}
 
 	@Override
@@ -143,9 +123,6 @@ public class IntegerSparseArray extends SparseArray<Integer> {
 		// TODO Auto-generated method stub
 		return (obj1+obj2);
 	}
-	
-	
-	
 
 }
 

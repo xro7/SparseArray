@@ -1,6 +1,6 @@
 package sparsearray;
 
-//import java.lang.reflect.Array;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -13,13 +13,9 @@ public abstract class SparseArray<T> {
 	private int rows;
 	private int columns;
 	private T zero;
-	
-	public SparseArray(){
-	}
-	
+		
 	
 	public SparseArray(T zero,T[][] denseArray){
-		//System.out.println(denseArray[0].length);
 		initArrays(denseArray.length);
 		this.zero = zero;
 		this.rows = denseArray.length;
@@ -58,21 +54,20 @@ public abstract class SparseArray<T> {
 					counter++;
 				}
 			}
-			offset[i+1] = counter;
-			
+			offset[i+1] = counter;		
 		}
 	}
 	
-	public void printArray(){
+	public T[][] getArray(){
 		
 		@SuppressWarnings("unchecked")
-		T[][] printArray = (T[][])new Object[getRows()][getColumns()];// Array.newInstance(SparseArray.class, getRows(),getColumns());//new T[getRows()][getColumns()];
+		T[][] array = (T[][])new Object[getRows()][getColumns()];// Array.newInstance(SparseArray.class, getRows(),getColumns());//new T[getRows()][getColumns()];
 		
 		for (int i = 0; i < getRows(); i++) {
 			
 			for (int j = 0; j < getColumns(); j++) {
 				
-				printArray[i][j] =getZero();
+				array[i][j] =getZero();
 				
 			}
 			
@@ -82,10 +77,17 @@ public abstract class SparseArray<T> {
 			
 			for (int i = getOffset(n); i < getOffset(n+1); i++) {
 				
-					printArray[n][getPosition().get(i)] =  getData().get(i);
+					array[n][getPosition().get(i)] =  getData().get(i);
 				
 			}
-		}
+		}	
+		return(array);
+		
+	}
+	
+	public void printArray(){
+		
+		T[][] array = getArray();
 		
 		for (int i = 0; i < getRows(); i++) {
 			
@@ -93,7 +95,7 @@ public abstract class SparseArray<T> {
 			
 			for (int j = 0; j < getColumns(); j++) {
 				
-				System.out.print(printArray[i][j]+" ");
+				System.out.print(array[i][j]+" ");
 				
 			}
 			
@@ -123,7 +125,7 @@ public abstract class SparseArray<T> {
 		System.out.println();
 	}
 	
-	public abstract SparseArray<T>  arrayMultiplication(SparseArray<T> sArray);
+	public abstract SparseArray<T>  arrayMultiplication(SparseArray<T> sArray) throws Exception;
 	
 	public abstract T mult(T obj1,T obj2);
 	

@@ -127,6 +127,7 @@ public abstract class SparseArray<T> {
 	
 	public abstract SparseArray<T>  arrayMultiplication(SparseArray<T> sArray) throws Exception;
 	public abstract SparseArray<T>  transpose() throws Exception;
+	public abstract SparseArray<T>  arrayAddition(SparseArray<T> sArray) throws Exception;
 	
 	public abstract T mult(T obj1,T obj2);
 	

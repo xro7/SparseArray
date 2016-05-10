@@ -64,6 +64,61 @@ public class IntegerSparseArray extends SparseArray<Integer> {
 	}
 	
 	@Override
+	public SparseArray<Integer> arrayAddition(SparseArray<Integer> sArray)
+			throws Exception {
+		
+		if(getRows()!= sArray.getRows() || getColumns()!=sArray.getColumns()){
+			throw new Exception("Diamensions do not match");
+		}
+		
+		List<Integer> data = new ArrayList<Integer>();
+		List<Integer> position = new ArrayList<Integer>();
+		int[] offset = new int[getRows()+1];
+		offset[0]=0;
+		List<Integer> rowlist = new ArrayList<Integer>();
+		List<Integer> positionlist = new ArrayList<Integer>();
+		int counter = 0;
+		
+		for (int n = 0; n < getRows(); n++) {
+			
+			init(rowlist,positionlist,getColumns());
+			for (int i = getOffset(n); i < getOffset(n+1); i++) {
+				
+				//for (int j = sArray.getOffset(getPosition().get(i)); j < sArray.getOffset(getPosition().get(i)+1); j++) {		
+				rowlist.set(getPosition().get(i), add(rowlist.get(getPosition().get(i)),getData().get(i)));
+				positionlist.set(getPosition().get(i),getPosition().get(i));
+				
+			}
+			
+			for (int i = sArray.getOffset(n); i < sArray.getOffset(n+1); i++) {
+				
+				//for (int j = sArray.getOffset(getPosition().get(i)); j < sArray.getOffset(getPosition().get(i)+1); j++) {		
+				rowlist.set(sArray.getPosition().get(i), add(rowlist.get(sArray.getPosition().get(i)),sArray.getData().get(i)));
+				positionlist.set(sArray.getPosition().get(i),sArray.getPosition().get(i));
+			}
+			
+			
+			for (Integer obj : rowlist) {
+				if (obj!=this.getZero()){
+					data.add(obj);
+					counter++;
+				}
+			}
+			for (Integer integer : positionlist) {
+				if (integer!=-1){
+					position.add(integer);
+				
+				}
+			}
+			offset[n+1] = counter;
+			init(rowlist,positionlist,getColumns());
+		}
+		
+		
+		return new IntegerSparseArray(data,position,offset,getRows(),sArray.getColumns());
+	}
+	
+	@Override
 	public SparseArray<Integer> transpose() throws Exception {
 		
 		//System.out.println(getColumns());
@@ -130,15 +185,17 @@ public class IntegerSparseArray extends SparseArray<Integer> {
 	
 	@Override
 	public Integer mult(Integer obj1, Integer obj2) {
-		// TODO Auto-generated method stub
+		
 		return (obj1 * obj2);
 	}
 
 	@Override
 	public Integer add(Integer obj1, Integer obj2) {
-		// TODO Auto-generated method stub
+		
 		return (obj1+obj2);
 	}
+
+
 
 
 }

@@ -2,48 +2,9 @@ package sparsearray;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 public class IntegerSparseArray extends SparseArray<Integer> {
-	
-	public static void main(String[] args){
-
-
-		Random rand = new Random();
-		//Integer[][] array = new Integer[50][100];
-		Integer[][] array =new Integer[][]{{0,2,0},{1,0,0},{0,1,0},{0,0,0}};
-		//Integer[][] array =new Integer[][]{{2},{1},{1}};
-		//Integer[][] array2 = new Integer[100][10];
-		Integer[][] array2 =new Integer[][]{{2,0,0},{0,0,1},{1,0,4}};
-		//Integer[][] array2 =new Integer[][]{{0,2,1}};
-		for (int i = 0; i < array.length; i++) {
-			for (int j = 0; j < array[0].length; j++) {
-				array[i][j] = rand.nextInt(2);
-			}
-		}
 		
-		for (int i = 0; i < array2.length; i++) {
-			for (int j = 0; j < array2[0].length; j++) {
-				array2[i][j] = rand.nextInt(2);
-			}
-		}
-		SparseArray<Integer> sp = new IntegerSparseArray(array);
-		sp.printSparseData();
-		sp.printArray();
-		SparseArray<Integer> sp2 = new IntegerSparseArray(array2);
-		sp2.printSparseData();
-		sp2.printArray();
-		IntegerSparseArray a;
-		try {
-			a = (IntegerSparseArray) sp.arrayMultiplication(sp2);
-			a.printSparseData();
-			a.printArray();
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-	
 	public IntegerSparseArray(Integer[][] denseArray){
 		super(0,denseArray);
 	}
@@ -102,6 +63,61 @@ public class IntegerSparseArray extends SparseArray<Integer> {
 
 	}
 	
+	@Override
+	public SparseArray<Integer> transpose() throws Exception {
+		
+		//System.out.println(getColumns());
+		@SuppressWarnings("unchecked")
+		ArrayList<Integer>[] groupData = (ArrayList<Integer>[])new ArrayList[getColumns()];
+		for (int n = 0; n < getColumns(); n++) {
+			groupData[n] = new ArrayList<>();
+		}
+		
+		@SuppressWarnings("unchecked")
+		ArrayList<Integer>[] groupPos = (ArrayList<Integer>[])new ArrayList[getColumns()];
+		for (int n = 0; n < getColumns(); n++) {
+			groupPos[n] = new ArrayList<>();
+		}
+		
+		for (int n = 0; n < getRows(); n++) {
+			
+			
+			for (int i = getOffset(n); i < getOffset(n+1); i++) {
+					
+				
+				groupData[getPosition().get(i)].add(getData().get(i));
+				groupPos[getPosition().get(i)].add(n);
+					
+				
+			}
+		}
+		
+		//build sparse array lists and arrays
+		int[] offset = new int[getColumns()+1];
+		offset[0]=0;
+		
+		for (int n = 1; n < getColumns()+1; n++) {
+			
+			offset[n] = offset[n-1] + groupData[n-1].size();
+		}
+			
+		ArrayList<Integer> data = new ArrayList<Integer>();
+		for (int n = 0; n < getColumns(); n++) {
+			
+			data.addAll(groupData[n]);
+		}
+		
+		ArrayList<Integer> position = new ArrayList<Integer>();
+		for (int n = 0; n < getColumns(); n++) {
+			position.addAll(groupPos[n]);
+		}
+		
+		return new IntegerSparseArray(data,position,offset,getColumns(),getRows());
+	}
+
+	
+	
+	
 	private void init(List<Integer> rowlist,List<Integer> positionlist,int length){
 		rowlist.clear();
 		positionlist.clear();
@@ -123,6 +139,7 @@ public class IntegerSparseArray extends SparseArray<Integer> {
 		// TODO Auto-generated method stub
 		return (obj1+obj2);
 	}
+
 
 }
 
